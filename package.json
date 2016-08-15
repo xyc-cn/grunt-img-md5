@@ -1,0 +1,61 @@
+{
+  "name": "grunt-img-md5",
+  "description": "The best Grunt plugin ever.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Administrator/grunt-img-md5",
+  "author": {
+    "name": "easonxie",
+    "email": "278255596@qq.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Administrator/grunt-img-md5.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Administrator/grunt-img-md5/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/Administrator/grunt-img-md5/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+   "files": [
+    "tasks",
+    "LICENSE-MIT"
+  ],
+  "_from": "grunt-res-version@*",
+  "_npmVersion": "3.3.12",
+  "_npmUser": {
+    "name": "gabyliu",
+    "email": "1198695124@qq.com"
+  },
+  "maintainers": [
+    "gabyliu <1198695124@qq.com>"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "main": "Gruntfile.js",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabyliu/grunt-res-version.git"
+  },
+  "license": "ISC"
+}
