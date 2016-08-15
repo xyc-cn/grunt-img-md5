@@ -28,9 +28,12 @@ grunt.initConfig({
     options: {
       // Task-specific options go here.
     },
-    your_target: {
+    files: {
       // Target-specific file lists and/or options go here.
     },
+    map: function(filename){ 
+      // new fileName
+    }
   },
 });
 ```
@@ -53,7 +56,7 @@ process write img according to options.Target and img's url
 Type: `Array(RegExp)`
 Default value: null
 
-this plugin matches '<img src="../img/a.png">' and 'url(..img/a.png)' in defalut config,you can add More RexExp which can 
+this plugin matches 'src="../img/a.png"' and 'url(..img/a.png)' in defalut config,you can add More RexExp which can 
 return a Array and Array[1] is img's url 
 
 #### function map
@@ -62,7 +65,7 @@ return new file path
 
 ### Usage Examples
 
-
+```js
 grunt.initConfig({
   img_md5: {
     html: {
