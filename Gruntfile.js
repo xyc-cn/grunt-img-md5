@@ -30,13 +30,31 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     img_md5: {
-      main: {
+      html: {
         options: {
-          dest:['png','jpg','gif'],
-          img:"release/img/"
+          Base:'test/src/html/', //会根据path.join(Base,匹配出来的图片url) 来确定源图片文件的url
+          Target:"test/release/html/", //会根据path.join(Base,匹配出来的图片url) 来确定新图片文件的url
+          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g] //额外的正则表达式匹配，期望返回类似"../img/a.png"类的结果
         },
         files: {
-          'release/': 'html/*.html'
+          'test/src/html/': 'test/src/html/*.html'
+        },
+         map: function(filename){ 
+          var newfilename = filename.replace('src/html/',"release/html/");
+          return newfilename;
+        }
+      },
+      css: {
+        options: {
+          Base:'test/src/css/', //会根据path.join(Base,匹配出来的图片url) 来确定源图片文件的url
+          Target:"test/release/css/", //会根据path.join(Base,匹配出来的图片url) 来确定新图片文件的url
+        },
+        files: {
+          'test/src/css/': 'test/src/css/*.css'
+        },
+         map: function(filename){ 
+          var newfilename = filename.replace('src/css/',"release/css/");
+          return newfilename;
         }
       }
     },

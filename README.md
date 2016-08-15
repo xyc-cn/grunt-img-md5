@@ -37,50 +37,61 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.Base
 Type: `String`
 Default value: `',  '`
 
-A string value that is used to do something with whatever.
+process gets img absolute path according to options.Base and img's url
 
-#### options.punctuation
+#### options.Target
 Type: `String`
 Default value: `'.'`
 
-A string value that is used to do something else with whatever else.
+process write img according to options.Target and img's url
+
+#### options.RegExp
+Type: `Array(RegExp)`
+Default value: null
+
+this plugin matches '<img src="../img/a.png">' and 'url(..img/a.png)' in defalut config,you can add More RexExp which can 
+return a Array and Array[1] is img's url 
+
+#### function map
+
+return new file path
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
 
-```js
 grunt.initConfig({
   img_md5: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    html: {
+        options:{
+          Base:'md5Src/html/', //会根据path.join(Base,匹配出来的图片url) 来确定源图片文件的url
+          Target:"md5Src/html/", //会根据path.join(Base,匹配出来的图片url) 来确定新图片文件的url
+          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g] //额外的正则表达式匹配，期望返回类似"../img/a.png"类的结果
+        },
+        files: {
+          'html/': 'html/*.html'
+        },
+        map: function(filename){ //
+          var newfilename = filename.replace('html/',"html/");
+          return newfilename;
+        }
+      },
   },
 });
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+
+##test
+
+run
 
 ```js
-grunt.initConfig({
-  img_md5: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
+npm run test
 ```
+you can see release folder build in test folder
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).

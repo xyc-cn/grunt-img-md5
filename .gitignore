@@ -1,3 +1,4 @@
 node_modules
 npm-debug.log
 tmp
+/img_md5.js
