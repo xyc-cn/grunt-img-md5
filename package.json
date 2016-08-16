@@ -24,10 +24,11 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "npm install&&grunt"
   },
   "devDependencies": {
     "grunt-contrib-clean": "^0.5.0",
+    "underscore":"~1.8.0",
     "grunt": "~0.4.5"
   },
   "keywords": [
