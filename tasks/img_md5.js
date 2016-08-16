@@ -107,6 +107,7 @@ module.exports = function (grunt) {
             var imgPath = getImgPath(p, v), destPath = getImgPath(dest, v), imgType;
             if(config.options&&config.options.Base){
                 imgPath = path.join(config.options.Base,v);
+                destPath = path.join(config.options.Target,v);
             }
             if (testMd5(imgPath)) {
                 return;
