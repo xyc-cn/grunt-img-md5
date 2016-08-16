@@ -70,9 +70,33 @@ grunt.initConfig({
   img_md5: {
     html: {
         options:{
-          Base:'md5Src/html/', //会根据path.join(Base,匹配出来的图片url) 来确定源图片文件的url
-          Target:"md5Src/html/", //会根据path.join(Base,匹配出来的图片url) 来确定新图片文件的url
-          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g] //额外的正则表达式匹配，期望返回类似"../img/a.png"类的结果
+          Base:'md5Src/html/', //会根据Base,匹配出来的图片url来确定源图片文件的url
+          Target:"md5Src/html/", //会根据Target,匹配出来的图片url来确定新图片文件的url
+          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g] //额外的正则表达式匹配，期望返回类似["anything","../img/a.png"]类的结果
+        },
+        files: {
+          'html/': 'html/*.html'
+        },
+        map: function(filename){ 
+          var newfilename = filename.replace('html/',"html/"); //返回新的html文件的地址
+          return newfilename;
+        }
+      },
+  },
+});
+```
+
+```js
+grunt.initConfig({
+  img_md5: {
+    html: {
+        options:{
+          BaseMap: function (v) {
+            return path.join('md5Src/html/',v); //v is img's url ,you shuold return the src img path
+          },
+          TargetMap:function (v) {
+            return path.join('md5Src/html/',v); //v is img's url ,you shuold return the dest img path
+          }
         },
         files: {
           'html/': 'html/*.html'
@@ -85,7 +109,6 @@ grunt.initConfig({
   },
 });
 ```
-
 
 ##test
 

@@ -1,6 +1,6 @@
 /*
  * grunt-img-md5
- * https://github.com/Administrator/grunt-img-md5
+ * https://github.com/xyc-cn/grunt-img-md5
  *
  * Copyright (c) 2016 easonxie
  * Licensed under the MIT license.
@@ -8,36 +8,28 @@
 
 'use strict';
 
+var path = require('path');
+
 module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    jshint: {
-      all: [
-        'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
-      ],
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp']
+      tests: ['test/release']
     },
 
     // Configuration to be run (and then tested).
     img_md5: {
       html: {
         options: {
-          Base:'test/src/html/', //会根据path.join(Base,匹配出来的图片url) 来确定源图片文件的url
-          Target:"test/release/html/", //会根据path.join(Base,匹配出来的图片url) 来确定新图片文件的url
-          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g] //额外的正则表达式匹配，期望返回类似"../img/a.png"类的结果
+          Base:'test/src/html/',
+          Target:"test/release/html/", 
+          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g]
         },
         files: {
-          'test/src/html/': 'test/src/html/*.html'
+          'test/src/html/': 'test/src/html/**/*.html'
         },
          map: function(filename){ 
           var newfilename = filename.replace('src/html/',"release/html/");
@@ -46,8 +38,8 @@ module.exports = function(grunt) {
       },
       css: {
         options: {
-          Base:'test/src/css/', //会根据path.join(Base,匹配出来的图片url) 来确定源图片文件的url
-          Target:"test/release/css/", //会根据path.join(Base,匹配出来的图片url) 来确定新图片文件的url
+          Base:'test/src/css/', 
+          Target:"test/release/css/", 
         },
         files: {
           'test/src/css/': 'test/src/css/*.css'
@@ -56,13 +48,26 @@ module.exports = function(grunt) {
           var newfilename = filename.replace('src/css/',"release/css/");
           return newfilename;
         }
+      },
+      js:{
+        options:{
+          BaseMap: function (v) {
+            return path.join('test/src/js/',v);
+          },
+          TargetMap:function (v) {
+            return path.join('test/release/js/',v);
+          }
+        },
+        files: {
+          'test/src/js/': 'test/src/js/**/*.js'
+        },
+        map: function(filename){
+          var newfilename = filename.replace('test/src/js/',"test/release/js/");
+          return newfilename;
+        }
       }
-    },
-
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js']
     }
+
 
   });
 
@@ -72,13 +77,9 @@ module.exports = function(grunt) {
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-  // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'img_md5', 'nodeunit']);
 
-  // By default, lint and run all tests.
-  grunt.registerTask('default', ['img_md5']);
+  grunt.registerTask('default', ['clean', 'img_md5']);
+
 
 };

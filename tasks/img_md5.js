@@ -1,6 +1,6 @@
 /*
  * grunt-img-md5
- * https://github.com/Administrator/grunt-img-md5
+ * https://github.com/xyc-cn/grunt-img-md5
  *
  * Copyright (c) 2016 easonxie
  * Licensed under the MIT license.
@@ -19,12 +19,12 @@ module.exports = function (grunt) {
      * @param p
      * @returns {*}
      */
-    function getMd5(p) {
+    function getMd5(p,filePath) {
         var str;
         try {
             str = fs.readFileSync(p, 'utf-8');
         } catch (e) {
-            grunt.log.warn("no such img src = " + p);
+            grunt.log.warn(filePath +" no such img src = " + p);
             return null;
         }
         var md5um = crypto.createHash('md5');
@@ -48,6 +48,7 @@ module.exports = function (grunt) {
         imgArray.forEach(function (v) {//替换文件里面的图片名
             src = src.replace(new RegExp(v.item,'g'), v.value);
         });
+
         grunt.file.write(path, src);
         imgMatchList = imgMatchList.concat(imgArray);
     }
@@ -105,15 +106,26 @@ module.exports = function (grunt) {
                 return;
             }
             var imgPath = getImgPath(p, v), destPath = getImgPath(dest, v), imgType;
-            if(config.options&&config.options.Base){
-                imgPath = path.join(config.options.Base,v);
-                destPath = path.join(config.options.Target,v);
+            if (config.options && config.options.Base && config.options.Target) {
+                var relatives = path.relative(config.options.Base, p);
+                imgPath = path.join(config.options.Base, '../', relatives, v);
+                destPath = path.join(config.options.Target, '../', relatives, v);
             }
-            if (testMd5(imgPath)) {
+            if (config.options && config.options.BaseMap) {
+                if (typeof config.options.BaseMap == "function") {
+                    imgPath = config.options.BaseMap(v);
+                }
+            }
+            if (config.options && config.options.TargetMap) {
+                if (typeof config.options.TargetMap == "function") {
+                    destPath = config.options.TargetMap(v);
+                }
+            }
+            if (testMd5(imgPath,p)) {
                 return;
             }
             var srcPath = imgPath;
-            var md5 = getMd5(imgPath);
+            var md5 = getMd5(imgPath,p);
             if (md5) {
                 imgPath.match(/\w*.(png|jpg|gif)/);
                 imgType = RegExp.$1;
@@ -133,9 +145,9 @@ module.exports = function (grunt) {
      * 判断图片md5是不是改变了
      * @param imgPath
      */
-    function testMd5(imgPath) {
+    function testMd5(imgPath,filePath) {
         var oldMd5 = imgPath.match(/(\w*).(png|jpg|gif)/)[1];
-        var md5 = getMd5(imgPath);
+        var md5 = getMd5(imgPath,filePath);
         if (oldMd5 == md5) {
             return true;
         } else {
