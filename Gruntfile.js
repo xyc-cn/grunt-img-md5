@@ -26,7 +26,8 @@ module.exports = function(grunt) {
         options: {
           Base:'test/src/html/',
           Target:"test/release/html/", 
-          RegExp:[/data-url\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g]
+          RegExp:[{RegExp:/(data-url)\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g,index:2}],
+          md5Length:8
         },
         files: {
           'test/src/html/': 'test/src/html/**/*.html'
@@ -39,7 +40,7 @@ module.exports = function(grunt) {
       css: {
         options: {
           Base:'test/src/css/', 
-          Target:"test/release/css/", 
+          Target:"test/release/css/"
         },
         files: {
           'test/src/css/': 'test/src/css/*.css'

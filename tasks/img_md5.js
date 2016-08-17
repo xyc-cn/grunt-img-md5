@@ -63,13 +63,17 @@ module.exports = function (grunt) {
         var imgMd5 = [],srcList,imgList,tempList;
         var patt_src = /src\s*=\s*["']([^<">']+?\.(jpg|png|gif))/g;
         var patt_url = /url\(['"]?([^<">\)']+?\.(jpg|png|gif))/g;
-        srcList = getMatchImgList(patt_src,src);
-        imgList = getMatchImgList(patt_url,src);
-        imgMd5 = imgMd5.concat(getMapArray(p,config,dest,srcList));
-        imgMd5 = imgMd5.concat(getMapArray(p,config,dest,imgList));
+        if(config&&config.options&&config.options.banDefalut){
+
+        }else{
+            srcList = getMatchImgList(patt_src,src);
+            imgList = getMatchImgList(patt_url,src);
+            imgMd5 = imgMd5.concat(getMapArray(p,config,dest,srcList));
+            imgMd5 = imgMd5.concat(getMapArray(p,config,dest,imgList));
+        }
         if(config&&config.options&&config.options.RegExp){
             config.options.RegExp.forEach(function (v) {
-                tempList = getMatchImgList(v,src);
+                tempList = getMatchImgList(v.RegExp,src, v.index);
                 imgMd5 = imgMd5.concat(getMapArray(p,config,dest,tempList));
             })
         }
@@ -81,12 +85,14 @@ module.exports = function (grunt) {
      * @param patt
      * @returns {Array}
      */
-    function getMatchImgList(patt,src){
+    function getMatchImgList(patt,src,index){
         var result,imgList = [];
+            index = index?index:1;
+
         while ((result = patt.exec(src)) != null) {
-            if(imgList.indexOf(result[1]) < 0){
-                result[1] = result[1].trim();
-                imgList.push(result[1]);
+            if(imgList.indexOf(result[index]) < 0){
+                result[index] = result[index].trim();
+                imgList.push(result[index]);
             }
         }
         return imgList;
@@ -127,6 +133,11 @@ module.exports = function (grunt) {
             var srcPath = imgPath;
             var md5 = getMd5(imgPath,p);
             if (md5) {
+                if(config&&config.options&&config.options.md5Length){
+                    if(md5.length>config.options.md5Length){
+                        md5 = md5.slice(0,config.options.md5Length);
+                    }
+                }
                 imgPath.match(/\w*.(png|jpg|gif)/);
                 imgType = RegExp.$1;
                 destPath = destPath.replace(/\w*.(png|jpg|gif)/, md5 + "." + imgType);
