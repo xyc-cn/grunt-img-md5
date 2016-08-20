@@ -127,7 +127,7 @@ module.exports = function (grunt) {
                     destPath = config.options.TargetMap(v);
                 }
             }
-            if (testMd5(imgPath,p)) {
+            if (testMd5(imgPath,p,config)) {
                 return;
             }
             var srcPath = imgPath;
@@ -156,9 +156,14 @@ module.exports = function (grunt) {
      * 判断图片md5是不是改变了
      * @param imgPath
      */
-    function testMd5(imgPath,filePath) {
+    function testMd5(imgPath,filePath,config) {
         var oldMd5 = imgPath.match(/(\w*).(png|jpg|gif)/)[1];
         var md5 = getMd5(imgPath,filePath);
+        if(config&&config.options&&config.options.md5Length){
+            if(md5.length>config.options.md5Length){
+                md5 = md5.slice(0,config.options.md5Length);
+            }
+        }
         if (oldMd5 == md5) {
             return true;
         } else {
@@ -220,6 +225,9 @@ module.exports = function (grunt) {
                 }
             });
         });
+        if(config.noMapFile){
+            return;
+        }
         recordMatchImg(imgMatchList,'img_md5.js');
         return;
     });

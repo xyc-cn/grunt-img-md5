@@ -57,7 +57,8 @@ module.exports = function(grunt) {
           },
           TargetMap:function (v) {
             return path.join('test/release/js/',v);
-          }
+          },
+          md5Length:8
         },
         files: {
           'test/src/js/': 'test/src/js/**/*.js'
@@ -76,9 +77,7 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-
 
   grunt.registerTask('default', ['clean', 'img_md5']);
 
