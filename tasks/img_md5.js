@@ -14,6 +14,7 @@ module.exports = function (grunt) {
     var path = require('path');
     var _ = require('underscore');
     var imgMatchList = [];
+    var stack404 = [];
     /**
      * 获取文件md5值
      * @param p
@@ -24,7 +25,10 @@ module.exports = function (grunt) {
         try {
             str = fs.readFileSync(p, 'utf-8');
         } catch (e) {
-            grunt.log.warn(filePath +" no such img src = " + p);
+            if(stack404.indexOf(p) < 0){
+                grunt.log.warn(filePath +" no such img src = " + p);
+                stack404.push(p);
+            }
             return null;
         }
         var md5um = crypto.createHash('md5');
@@ -159,7 +163,7 @@ module.exports = function (grunt) {
     function testMd5(imgPath,filePath,config) {
         var oldMd5 = imgPath.match(/(\w*).(png|jpg|gif)/)[1];
         var md5 = getMd5(imgPath,filePath);
-        if(config&&config.options&&config.options.md5Length){
+        if(md5&&config&&config.options&&config.options.md5Length){
             if(md5.length>config.options.md5Length){
                 md5 = md5.slice(0,config.options.md5Length);
             }
