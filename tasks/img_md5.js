@@ -115,7 +115,7 @@ module.exports = function (grunt) {
             if (v.substr(0, 7) == "http://" || v.substr(0, 7) == "https:/") {
                 return;
             }
-            var imgPath = getImgPath(p, v), destPath = getImgPath(dest, v), imgType;
+            var imgPath = getImgPath(p, v), destPath = getImgPath(dest, v);
             if (config.options && config.options.Base && config.options.Target) {
                 var relatives = path.relative(config.options.Base, p);
                 imgPath = path.join(config.options.Base, '../', relatives, v);
@@ -142,15 +142,17 @@ module.exports = function (grunt) {
                         md5 = md5.slice(0,config.options.md5Length);
                     }
                 }
-                imgPath.match(/\w*.(png|jpg|gif)/);
-                imgType = RegExp.$1;
-                destPath = destPath.replace(/\w*.(png|jpg|gif)/, md5 + "." + imgType);
+                destPath = destPath.replace(/(\w*).(png|jpg|gif)/, function (match) {
+                    return RegExp.$1 + '_' + md5 + "." + RegExp.$2;
+                });
                 if (!grunt.file.exists(destPath)) {
                     grunt.file.copy(srcPath, destPath);
                 }
                 imgMd5.push({
                     item: v,
-                    value: v.replace(/\w*.(png|jpg|gif)/, md5 + "." + imgType)
+                    value: v.replace(/(\w*).(png|jpg|gif)/, function (match) {
+                        return RegExp.$1 + '_' + md5 + "." + RegExp.$2;
+                    })
                 });
             }
         });
