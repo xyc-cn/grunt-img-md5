@@ -32,7 +32,7 @@ module.exports = function (grunt) {
             return null;
         }
         var md5um = crypto.createHash('md5');
-        md5um.update(str);
+        md5um.update(str,'utf-8');
         return md5um.digest('hex');
     }
 

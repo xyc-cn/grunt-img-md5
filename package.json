@@ -1,7 +1,7 @@
 {
   "name": "grunt-img-md5",
   "description": "change img name into img md5 value",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "https://github.com/xyc-cn/grunt-img-md5",
   "author": {
     "name": "easonxie",
