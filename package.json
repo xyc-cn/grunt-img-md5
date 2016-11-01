@@ -1,7 +1,7 @@
 {
   "name": "grunt-img-md5",
   "description": "change img name into img md5 value",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "homepage": "https://github.com/xyc-cn/grunt-img-md5",
   "author": {
     "name": "easonxie",
@@ -28,10 +28,13 @@
   },
   "devDependencies": {
     "grunt-contrib-clean": "^0.5.0",
-    "underscore":"~1.8.0",
+    "underscore": "~1.8.0",
     "grunt": "~0.4.5"
   },
   "keywords": [
     "grunt img md5"
-  ]
+  ],
+  "dependencies": {
+    "md5": "^2.2.1"
+  }
 }

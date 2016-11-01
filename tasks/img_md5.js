@@ -10,7 +10,7 @@
 
 module.exports = function (grunt) {
     var fs = require('fs');
-    var crypto = require('crypto');
+    var md5 = require('md5');
     var path = require('path');
     var _ = require('underscore');
     var imgMatchList = [];
@@ -31,9 +31,7 @@ module.exports = function (grunt) {
             }
             return null;
         }
-        var md5um = crypto.createHash('md5');
-        md5um.update(str,'utf-8');
-        return md5um.digest('hex');
+        return md5(str);
     }
 
     /**
