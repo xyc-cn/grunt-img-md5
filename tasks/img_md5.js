@@ -10,7 +10,7 @@
 
 module.exports = function (grunt) {
     var fs = require('fs');
-    var md5 = require('md5');
+    var crypto = require('crypto');
     var path = require('path');
     var _ = require('underscore');
     var imgMatchList = [];
@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     function getMd5(p,filePath) {
         var str;
         try {
-            str = fs.readFileSync(p, 'utf-8');
+            str = fs.readFileSync(p);
         } catch (e) {
             if(stack404.indexOf(p) < 0){
                 grunt.log.warn(filePath +" no such img src = " + p);
@@ -31,7 +31,9 @@ module.exports = function (grunt) {
             }
             return null;
         }
-        return md5(str);
+        var md5um = crypto.createHash('md5');
+        md5um.update(str,'utf-8');
+        return md5um.digest('hex');
     }
 
     /**
